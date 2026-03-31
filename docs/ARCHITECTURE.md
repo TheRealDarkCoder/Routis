@@ -13,7 +13,6 @@
 | Database | PostgreSQL 18 + Alembic migrations |
 | Cache / rate-limiting | Redis |
 | Shared types | FastAPI `openapi.json` → TypeScript via `@hey-api/openapi-ts` (CI-generated, never hand-written) |
-| Monorepo | Turborepo |
 | Deployment | Single AWS EC2 instance (ELB to be added when needed) |
 | CI/CD | GitHub Actions |
 
