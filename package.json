@@ -2,6 +2,6 @@
   "name": "routis",
   "private": true,
   "scripts": {
-    "codegen": "cd apps/web && pnpm run codegen"
+    "codegen": "cd apps/api && uv run python export_schema.py && cd ../../apps/web && npm run codegen"
   }
 }
