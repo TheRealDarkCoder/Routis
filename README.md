@@ -12,6 +12,8 @@ Anonymous course review platform for the University of Oulu. Students can submit
 
 ## Getting Started
 
+Read [Contributing Guidelines](CONTRIBUTING.md)
+
 ```bash
 cp .env.example .env
 docker compose up
