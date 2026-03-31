@@ -9,7 +9,7 @@
 | Layer | Technology |
 |---|---|
 | Frontend | Next.js 16 (App Router) + Tailwind CSS |
-| Backend | FastAPI (Python 3.14) + Pydantic v2 |
+| Backend | FastAPI (Python 3.13) + Pydantic v2 |
 | Database | PostgreSQL 18 + Alembic migrations |
 | Cache / rate-limiting | Redis |
 | Shared types | FastAPI `openapi.json` → TypeScript via `@hey-api/openapi-ts` (CI-generated, never hand-written) |

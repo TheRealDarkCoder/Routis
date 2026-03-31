@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api
+    networks:
+      - routis
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/routis
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - routis
+
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: routis
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - routis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - routis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-backup:
+    image: alpine:latest
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGHOST: postgres
+      PGDATABASE: routis
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - routis
+    command: sh -c "echo 'DB backup service (stub - pg_dump → S3 logic pending)' && sleep infinity"
+    volumes:
+      - backup_data:/backup
+
+volumes:
+  postgres_data:
+  redis_data:
+  backup_data:
+
+networks:
+  routis:
+    driver: bridge
