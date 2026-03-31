@@ -1,0 +1,7 @@
+{
+  "name": "routis",
+  "private": true,
+  "scripts": {
+    "codegen": "cd apps/web && pnpm run codegen"
+  }
+}

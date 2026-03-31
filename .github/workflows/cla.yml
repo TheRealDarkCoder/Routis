@@ -17,5 +17,5 @@ jobs:
         with:
           path-to-signatures: "signatures/version1/cla.json"
           path-to-document: "https://github.com/TheRealDarkCoder/Routis/blob/main/docs/CLA.md" # IMPORTANT: Update this URL!
-          branch: "main"
+          branch: "signatures"
           allowlist: dependabot[bot],greenkeeper[bot]
