@@ -10,12 +10,18 @@ jobs:
   web:
     name: Web
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/web
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: apps/api/uv.lock
+
+      - name: Export OpenAPI schema
+        working-directory: apps/api
+        run: uv sync --frozen && uv run python export_schema.py
 
       - uses: actions/setup-node@v4
         with:
@@ -23,11 +29,21 @@ jobs:
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
 
-      - run: npm ci
+      - name: Install dependencies
+        working-directory: apps/web
+        run: npm ci
 
-      - run: npm run lint
+      - name: Generate API client
+        working-directory: apps/web
+        run: npm run codegen
 
-      - run: npm run build
+      - name: Lint
+        working-directory: apps/web
+        run: npm run lint
+
+      - name: Build
+        working-directory: apps/web
+        run: npm run build
 
   api:
     name: API
